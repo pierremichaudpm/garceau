@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef, useCallback } from "react";
 import "./App.css";
 
 const HERO_SLIDES = [
@@ -207,10 +207,15 @@ function useReveal() {
   return ref;
 }
 
-function Reveal({ children, className = "", as: Tag = "div", ...props }) {
-  const ref = useReveal();
-  return <Tag ref={ref} className={`reveal ${className}`} {...props}>{children}</Tag>;
-}
+const Reveal = forwardRef(function Reveal({ children, className = "", as: Tag = "div", ...props }, externalRef) {
+  const internalRef = useReveal();
+  const mergedRef = useCallback((node) => {
+    internalRef.current = node;
+    if (typeof externalRef === "function") externalRef(node);
+    else if (externalRef) externalRef.current = node;
+  }, [externalRef]);
+  return <Tag ref={mergedRef} className={`reveal ${className}`} {...props}>{children}</Tag>;
+});
 
 function Modal({ data, onClose, type }) {
   useEffect(() => {
@@ -354,7 +359,10 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
   const [modal, setModal] = useState(null);
-  const actPausedRef = useRef(false);
+  const actPausedRef = useRef(true);
+  const actVisibleRef = useRef(false);
+  const actStartedRef = useRef(false);
+  const actSectionRef = useRef(null);
 
   useEffect(() => {
     const h = () => setScrolled((window.scrollY || 0) > 60);
@@ -369,9 +377,28 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Activity auto-rotate: 5s, pauses on interaction or modal open, resumes after 10s
+  // Detect when activities section scrolls into view
   useEffect(() => {
-    if (actPausedRef.current || modal) return;
+    const el = actSectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        actVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && !actStartedRef.current) {
+          actStartedRef.current = true;
+          // 5s delay before starting auto-rotate
+          setTimeout(() => { actPausedRef.current = false; }, 5000);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // Activity auto-rotate: only when visible, started, not paused, no modal
+  useEffect(() => {
+    if (!actStartedRef.current || actPausedRef.current || modal || !actVisibleRef.current) return;
     const interval = setInterval(() => {
       setActiveActivity(i => (i + 1) % ACTIVITIES.length);
     }, 5000);
@@ -469,7 +496,7 @@ export default function App() {
       </section>
 
       {/* ACTIVITÉS — carousel horizontal */}
-      <Reveal as="section" className="sec" id="activites">
+      <Reveal as="section" className="sec" id="activites" ref={actSectionRef}>
         <div className="sec-head">
           <span className="sec-num">01</span>
           <h2 className="sec-t">Activités</h2>
