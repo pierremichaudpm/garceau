@@ -4,8 +4,8 @@ import "./App.css";
 const HERO_SLIDES = [
   { src: "/hero.webp", pos: "center 40%", mobilePos: "center 40%" },
   { src: "/velo-tour-des-deux-lacs.jpg", pos: "center center", mobilePos: "center center" },
-  { src: "/donat_lac.jpg", pos: "center 30%", mobilePos: "30% 30%" },
-  { src: "/hiking.jpg", pos: "center center", mobilePos: "30% center" },
+  { src: "/donat_lac.jpg", pos: "center 30%", mobilePos: "center 40%" },
+  { src: "/hiking.jpg", pos: "center center", mobilePos: "65% center" },
 ];
 
 const PHOTOS = {
