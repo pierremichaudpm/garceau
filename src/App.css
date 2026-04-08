@@ -760,12 +760,13 @@
     gap: 12px; min-height: auto;
     position: absolute; bottom: 0; left: 0; right: 0;
   }
-  .hero-content { padding-bottom: 0; }
-  .hero-h1 { font-size: 38px; line-height: 0.95; margin-bottom: 8px; }
+  .hero-content { padding-bottom: 0; position: relative; }
   .hero-tag {
     font-size: 10px; letter-spacing: 3px; padding: 5px 10px;
-    position: absolute; top: -90px;
+    position: absolute; bottom: 100%; margin-bottom: 90px;
+    animation: none; opacity: 1; transform: none;
   }
+  .hero-h1 { font-size: 38px; line-height: 0.95; margin-bottom: 8px; }
   .hero-sub { display: none; }
 
   /* Hero CTAs — row with chat button */
