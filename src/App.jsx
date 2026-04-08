@@ -2,10 +2,10 @@ import { useState, useEffect, useRef, forwardRef, useCallback } from "react";
 import "./App.css";
 
 const HERO_SLIDES = [
-  { src: "/hero.webp", pos: "center 40%", mobilePos: "center 40%" },
+  { src: "/hero.webp", pos: "center 40%", mobilePos: "center center" },
   { src: "/velo-tour-des-deux-lacs.jpg", pos: "center center", mobilePos: "center center" },
-  { src: "/donat_lac.jpg", pos: "center 30%", mobilePos: "center 40%" },
-  { src: "/hiking.jpg", pos: "center center", mobilePos: "65% center" },
+  { src: "/donat_lac.jpg", pos: "center 30%", mobilePos: "center center" },
+  { src: "/hiking.jpg", pos: "center center", mobilePos: "72% center" },
 ];
 
 const PHOTOS = {
@@ -483,12 +483,9 @@ export default function App() {
           {HERO_SLIDES.map((slide, i) => (
             <div
               key={i}
-              className="hero-slide"
+              className={`hero-slide hero-slide-${i}`}
               data-active={i === heroSlide}
-              style={{
-                backgroundImage: `url(${slide.src})`,
-                backgroundPosition: isMobile ? slide.mobilePos : slide.pos,
-              }}
+              style={{ backgroundImage: `url(${slide.src})` }}
             />
           ))}
         </div>

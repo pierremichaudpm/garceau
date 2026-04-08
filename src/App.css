@@ -127,6 +127,12 @@
               transform 7s linear; /* slow zoom in when active */
 }
 
+/* Slide positions — desktop */
+.hero-slide-0 { background-position: center 40%; }
+.hero-slide-1 { background-position: center center; }
+.hero-slide-2 { background-position: center 30%; }
+.hero-slide-3 { background-position: center center; }
+
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
   background:
@@ -763,14 +769,19 @@
   .hero-tag {
     font-size: 10px; letter-spacing: 3px; padding: 5px 10px;
     animation: none; opacity: 1; transform: none;
-    order: -1; margin-bottom: auto; align-self: flex-start;
+    order: -1; margin-bottom: auto; align-self: flex-start; margin-top: 40px;
   }
-  .hero-h1 { font-size: 38px; line-height: 0.95; margin-bottom: 8px; margin-top: auto; }
+  /* Mobile slide positions — tassées vers la gauche */
+  .hero-slide-0 { background-position: 65% center !important; }
+  .hero-slide-2 { background-position: 65% center !important; }
+  .hero-slide-3 { background-position: 72% center !important; }
+
+  .hero-h1 { font-size: 38px; line-height: 0.95; margin-bottom: 20px; margin-top: auto; }
   .hero-sub { display: none; }
 
   /* Hero CTAs — row with chat button */
   .hero-ctas {
-    flex-direction: row; gap: 10px;
+    flex-direction: row; gap: 10px; margin-bottom: 20px;
   }
   .hero-ctas .btn-r {
     flex: 1; text-align: center; padding: 14px 16px; font-size: 10px;
