@@ -777,11 +777,6 @@
   .hero-ctas .btn-g { display: none; }
   .hero-dots { display: none; }
 
-  /* Hero images 3 & 4 shifted left */
-  .hero-slide:nth-child(3),
-  .hero-slide:nth-child(4) {
-    left: -60px; right: 60px;
-  }
 
   /* Chat toggle pulse */
   .chat-toggle {

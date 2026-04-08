@@ -2,10 +2,10 @@ import { useState, useEffect, useRef, forwardRef, useCallback } from "react";
 import "./App.css";
 
 const HERO_SLIDES = [
-  { src: "/hero.webp", pos: "center 40%" },
-  { src: "/velo-tour-des-deux-lacs.jpg", pos: "center center" },
-  { src: "/donat_lac.jpg", pos: "center 30%" },
-  { src: "/hiking.jpg", pos: "center center" },
+  { src: "/hero.webp", pos: "center 40%", mobilePos: "center 40%" },
+  { src: "/velo-tour-des-deux-lacs.jpg", pos: "center center", mobilePos: "center center" },
+  { src: "/donat_lac.jpg", pos: "center 30%", mobilePos: "30% 30%" },
+  { src: "/hiking.jpg", pos: "center center", mobilePos: "30% center" },
 ];
 
 const PHOTOS = {
@@ -358,6 +358,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
   const [modal, setModal] = useState(null);
   const actPausedRef = useRef(true);
   const actVisibleRef = useRef(false);
@@ -418,12 +419,15 @@ export default function App() {
     setMenuOpen(false);
   };
 
-  // Auto-scroll dots to active
+  // Auto-scroll dots to active (only within the dots container, not the page)
   useEffect(() => {
     const container = actDotsRef.current;
     if (!container) return;
     const activeBtn = container.children[activeActivity];
-    if (activeBtn) activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    if (activeBtn) {
+      const left = activeBtn.offsetLeft - container.offsetWidth / 2 + activeBtn.offsetWidth / 2;
+      container.scrollTo({ left, behavior: "smooth" });
+    }
   }, [activeActivity]);
 
   // Touch swipe for activities
@@ -483,7 +487,7 @@ export default function App() {
               data-active={i === heroSlide}
               style={{
                 backgroundImage: `url(${slide.src})`,
-                backgroundPosition: slide.pos,
+                backgroundPosition: isMobile ? slide.mobilePos : slide.pos,
               }}
             />
           ))}
