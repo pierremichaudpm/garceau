@@ -417,6 +417,18 @@ export default function App() {
     setMenuOpen(false);
   };
 
+  // Touch swipe for activities
+  const touchRef = useRef({ x: 0, y: 0 });
+  const onTouchStart = (e) => { touchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; };
+  const onTouchEnd = (e) => {
+    const dx = e.changedTouches[0].clientX - touchRef.current.x;
+    const dy = e.changedTouches[0].clientY - touchRef.current.y;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) setActivityManual(i => Math.min(i + 1, ACTIVITIES.length - 1));
+      else setActivityManual(i => Math.max(i - 1, 0));
+    }
+  };
+
   return (
     <>
       {/* NAV */}
@@ -436,8 +448,7 @@ export default function App() {
             Hiver ↗
           </a>
         </div>
-        <button className="nav-burger" onClick={() => setMenuOpen(!menuOpen)}
-          style={{ background: "none", border: "none", color: "var(--ink)", fontSize: 22, cursor: "pointer", padding: 8, lineHeight: 1 }}>
+        <button className="nav-burger" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? "✕" : "≡"}
         </button>
       </nav>
@@ -506,7 +517,7 @@ export default function App() {
             <button className="act-arrow" onClick={() => setActivityManual(i => (i + 1) % ACTIVITIES.length)}>→</button>
           </div>
         </div>
-        <div className="act-carousel">
+        <div className="act-carousel" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           <div className="act-track" style={{ transform: `translateX(-${activeActivity * 100}%)` }}>
             {ACTIVITIES.map((a, i) => (
               <div key={a.id} className="act-slide">
