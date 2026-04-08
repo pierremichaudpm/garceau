@@ -763,20 +763,24 @@
   .hero-content { padding-bottom: 0; }
   .hero-h1 { font-size: 38px; line-height: 0.95; margin-bottom: 16px; }
   .hero-tag { font-size: 10px; letter-spacing: 3px; padding: 5px 10px; }
-  .hero-sub { font-size: 15px; margin-bottom: 20px; }
+  .hero-sub { display: none; }
 
   /* Hero CTAs — row with chat button */
   .hero-ctas {
     flex-direction: row; gap: 10px;
   }
-  .hero-ctas .btn-r { flex: 1; text-align: center; padding: 14px 16px; font-size: 10px; }
+  .hero-ctas .btn-r {
+    flex: 1; text-align: center; padding: 14px 16px; font-size: 10px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(8px);
+  }
   .hero-ctas .btn-g { display: none; }
-  .hero-dots { justify-content: center; }
+  .hero-dots { display: none; }
 
   /* Hero images 3 & 4 shifted left */
   .hero-slide:nth-child(3),
   .hero-slide:nth-child(4) {
-    background-position: calc(center - 60px) center !important;
+    left: -60px; right: 60px;
   }
 
   /* Chat toggle pulse */

@@ -363,6 +363,7 @@ export default function App() {
   const actVisibleRef = useRef(false);
   const actStartedRef = useRef(false);
   const actSectionRef = useRef(null);
+  const actDotsRef = useRef(null);
 
   useEffect(() => {
     const h = () => setScrolled((window.scrollY || 0) > 60);
@@ -416,6 +417,14 @@ export default function App() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
   };
+
+  // Auto-scroll dots to active
+  useEffect(() => {
+    const container = actDotsRef.current;
+    if (!container) return;
+    const activeBtn = container.children[activeActivity];
+    if (activeBtn) activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [activeActivity]);
 
   // Touch swipe for activities
   const touchRef = useRef({ x: 0, y: 0 });
@@ -549,7 +558,7 @@ export default function App() {
             ))}
           </div>
         </div>
-        <div className="act-dots">
+        <div className="act-dots" ref={actDotsRef}>
           {ACTIVITIES.map((a, i) => (
             <button key={a.id} className={`act-dot ${i === activeActivity ? "act-dot-on" : ""}`} onClick={() => setActivityManual(i)}>
               {a.label}
