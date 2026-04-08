@@ -207,6 +207,28 @@ function useReveal() {
   return ref;
 }
 
+function useParallax(speed = 0.15) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const h = () => {
+      const rect = el.getBoundingClientRect();
+      const offset = (rect.top - window.innerHeight / 2) * speed;
+      el.style.transform = `translateY(${offset}px)`;
+    };
+    window.addEventListener("scroll", h, { passive: true });
+    h();
+    return () => window.removeEventListener("scroll", h);
+  }, [speed]);
+  return ref;
+}
+
+function Parallax({ children, speed = 0.15, className = "" }) {
+  const ref = useParallax(speed);
+  return <div ref={ref} className={className} style={{ willChange: "transform" }}>{children}</div>;
+}
+
 const Reveal = forwardRef(function Reveal({ children, className = "", as: Tag = "div", ...props }, externalRef) {
   const internalRef = useReveal();
   const mergedRef = useCallback((node) => {
@@ -576,7 +598,7 @@ export default function App() {
         </div>
         <div className="srv-grid">
           {SERVICES.map((s, i) => (
-            <div key={i} className="srv-cell" onClick={() => setModal({ type: "service", data: s })}>
+            <div key={i} className="srv-cell srv-stagger" style={{ transitionDelay: `${i * 0.07}s` }} onClick={() => setModal({ type: "service", data: s })}>
               <div className="srv-n">{s.name}</div>
               <div className="srv-d">{s.detail}</div>
               <span className="srv-more">+</span>
@@ -587,7 +609,11 @@ export default function App() {
 
       {/* TERRASSE */}
       <Reveal className="terrasse" style={{ paddingTop: 48 }}>
-        <img src={PHOTOS.terrasse} alt="Terrasse avec vue sur la montagne" className="terrasse-img" />
+        <div className="terrasse-parallax">
+          <Parallax speed={0.08}>
+            <img src={PHOTOS.terrasse} alt="Terrasse avec vue sur la montagne" className="terrasse-img" />
+          </Parallax>
+        </div>
         <div className="terrasse-caption">
           <span className="terrasse-caption-text">Terrasse · Resto-bar</span>
           <span className="terrasse-caption-tag">Vue sur la montagne</span>
@@ -599,20 +625,20 @@ export default function App() {
         <div className="camp-inner">
           <img src={PHOTOS.camp} alt="Montagne" className="camp-img" />
           <div>
-            <div className="camp-label">03 — Camp de base</div>
-            <p className="camp-q">
+            <Reveal className="camp-label" style={{ transitionDelay: "0.1s" }}>03 — Camp de base</Reveal>
+            <Reveal as="p" className="camp-q" style={{ transitionDelay: "0.25s" }}>
               Garceau n'est pas qu'une station de ski.<br />
               C'est un lieu central de montagne — vivant, accueillant, rassembleur.
-            </p>
-            <p className="camp-p">
+            </Reveal>
+            <Reveal as="p" className="camp-p" style={{ transitionDelay: "0.4s" }}>
               Point de départ pour les sentiers. Point d'ancrage pour la journée.
               Lieu de retour après l'effort. La boutique, la terrasse, le belvédère,
               le pump track — tout part d'ici et tout y revient.
-            </p>
-            <p className="camp-p">
+            </Reveal>
+            <Reveal as="p" className="camp-p" style={{ transitionDelay: "0.55s" }}>
               À 90 minutes de Montréal, au cœur de Saint-Donat, Garceau est le
               camp de base naturel pour découvrir la montagne autrement.
-            </p>
+            </Reveal>
           </div>
         </div>
       </Reveal>
