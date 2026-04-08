@@ -437,8 +437,8 @@ export default function App() {
     const dx = e.changedTouches[0].clientX - touchRef.current.x;
     const dy = e.changedTouches[0].clientY - touchRef.current.y;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      if (dx < 0) setActivityManual(i => Math.min(i + 1, ACTIVITIES.length - 1));
-      else setActivityManual(i => Math.max(i - 1, 0));
+      if (dx < 0) setActivityManual(i => (i + 1) % ACTIVITIES.length);
+      else setActivityManual(i => (i - 1 + ACTIVITIES.length) % ACTIVITIES.length);
     }
   };
 
