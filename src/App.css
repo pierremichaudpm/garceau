@@ -756,13 +756,16 @@
   }
   .hero-inner {
     flex-direction: column; align-items: stretch;
-    justify-content: flex-end; padding: 16px 16px 20px;
+    justify-content: flex-end; padding: 16px 16px 15px;
     gap: 12px; min-height: auto;
     position: absolute; bottom: 0; left: 0; right: 0;
   }
   .hero-content { padding-bottom: 0; }
-  .hero-h1 { font-size: 38px; line-height: 0.95; margin-bottom: 16px; }
-  .hero-tag { font-size: 10px; letter-spacing: 3px; padding: 5px 10px; }
+  .hero-h1 { font-size: 38px; line-height: 0.95; margin-bottom: 8px; }
+  .hero-tag {
+    font-size: 10px; letter-spacing: 3px; padding: 5px 10px;
+    position: absolute; top: -90px;
+  }
   .hero-sub { display: none; }
 
   /* Hero CTAs — row with chat button */
